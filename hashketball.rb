@@ -134,54 +134,40 @@ def all_players
   game_hash[:home][:players] + game_hash[:away][:players]
 end
 
-def player_objects(player_name)
-  player = all_players.find{ |player| player[:player_name] == player_name}
-end
-
-def team_objects(team)
-  team_stats = game_hash.find do |location, team_info|
-    team_info[:team_name] == team
-  end
-  team_stats[1]
+def team_stats(team_name)
+  teams = game_hash.find {|location, team| team[:team_name] == team_name}
+  teams[1]
 end
 
 def num_points_scored(player_name)
-  found_player = player_objects(player_name)
+  found_player = player_stats(player_name)
   found_player[:points]
 end
 
 def shoe_size(player_name)
-  found_player = player_objects(player_name)
+  found_player = player_stats(player_name)
   found_player[:shoe]
 end
 
 def team_colors(team_name)
-  team_color = team_objects(team_name)
-  team_color[:colors]
+  found_team = team_stats(team_name)
+  found_team[:colors]
 end
 
 def team_names
-  game_hash.map do |location, team_name|
-    team_name[:team_name]
-  end
+  game_hash.map {|location, team_name| team_name[:team_name]}
 end
 
 def player_numbers(team_name)
-  team = team_objects(team_name)
-  team[:players].map do |player|
-    player[:number]
-  end
+  team = team_stats(team_name)
+  team[:players].map {|player| player[:number]}
 end
 
 def player_stats(player_name)
-  found_player = all_players.find do |player|
-    player[:player_name] == player_name
-  end
+  all_players.find {|player| player[:player_name] == player_name}
 end
 
 def big_shoe_rebounds
-  big_shoe = all_players.max_by do |player|
-    player[:shoe]
-  end
+  big_shoe = all_players.max_by {|player| player[:shoe]}
   big_shoe[:rebounds]
 end
